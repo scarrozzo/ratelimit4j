@@ -52,6 +52,7 @@ mvn clean install
    ```Java
      rateLimiter.evaluateRequest(key);
    ```
+When the number of requests exceeds the configured threshold determined by the chosen algorithm, the method invocation will throw an exception of the "RateLimiterException" type.
 
 ## Pure Java Redis
 1) The project is not currently on Maven Central, so you will need to download this repository and run the clean install locally (Maven version tested 3.8.1):
@@ -99,6 +100,7 @@ mvn clean install
     ```Java
      rateLimiter.evaluateRequest(key);
    ```
+When the number of requests exceeds the configured threshold determined by the chosen algorithm, the method invocation will throw an exception of the "RateLimiterException" type.
 
 ## Spring boot Caffeine
 1) The project is not currently on Maven Central, so you will need to download this repository and run the clean install locally (Maven version tested 3.8.1):
@@ -128,6 +130,7 @@ and then invoke the rate limiter's "evalutateRequest" method where you want to a
 ```Java
  rateLimiter1.evaluateRequest(key);
 ```
+When the number of requests exceeds the configured threshold determined by the chosen algorithm, the method invocation will throw an exception of the "RateLimiterException" type.
 4) You can also configure an automatic rate limiter on incoming http requests through spring properties. For example, you can configure a rate limiter on all incoming http requests that contain the path "/api/v1/admin.*" (regex are supported) using the "Token Bucket" algorithm and using the user's IP address as a criterion by entering the following configuration in spring's "application.yml" file: 
 ```YAML
 ratelimit4j:
@@ -143,6 +146,7 @@ ratelimit4j:
       bucketSize: 3
       refillPeriodInMilliSeconds: 5_000
 ```
+When the number of requests exceeds the configured threshold determined by the chosen algorithm, the method invocation will throw an exception of the "RateLimiterException" type.
 See the next sections for a list of all configurable spring parameters.
 
 ## Spring boot Redis
@@ -191,6 +195,7 @@ and then invoke the rate limiter's "evalutateRequest" method where you want to a
 ```Java
  rateLimiter1.evaluateRequest(key);
 ```
+When the number of requests exceeds the configured threshold determined by the chosen algorithm, the method invocation will throw an exception of the "RateLimiterException" type.
 5) You can also configure an automatic rate limiter on incoming http requests through spring properties. For example, you can configure a rate limiter on all incoming http requests that contain the path "/api/v1/admin.*" (regex are supported) using the "fixed window counter" algorithm and using the user's IP address as a criterion by entering the following configuration in spring's "application.yml" file: 
 ```YAML
 ratelimit4j:
@@ -206,6 +211,7 @@ ratelimit4j:
       numberOfRequests: 2
       windowSize: 5000
 ```
+When the number of requests exceeds the configured threshold determined by the chosen algorithm, the method invocation will throw an exception of the "RateLimiterException" type.
 See the next sections for a list of all configurable spring parameters.
 
 # Spring properties 
