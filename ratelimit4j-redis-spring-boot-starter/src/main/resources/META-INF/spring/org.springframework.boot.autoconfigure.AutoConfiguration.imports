@@ -1,0 +1,3 @@
+com.github.scarrozzo.ratelimit4j.spring.redis.autoconfigure.RedisTokenBucketRateLimiterAutoconfiguration
+com.github.scarrozzo.ratelimit4j.spring.redis.autoconfigure.RedisLeakyBucketRateLimiterAutoconfiguration
+com.github.scarrozzo.ratelimit4j.spring.redis.autoconfigure.RedisFixedWindowCounterRateLimiterAutoconfiguration
