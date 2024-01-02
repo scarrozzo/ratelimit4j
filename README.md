@@ -16,4 +16,90 @@ The library is structured as a multimodule Maven project and is composed as foll
 
 # Usage
 
-Coming soon
+## Pure Java Caffeine
+1) The project is not currently on Maven Central, so you will need to download this repository and run the clean install locally (Maven version tested 3.8.1):
+```
+mvn clean install
+```
+3) Place the Maven dependency inside your project:
+```
+<dependency>
+    <groupId>com.github.scarrozzo</groupId>
+    <artifactId>ratelimit4j-caffeine</artifactId>
+    <version>0.1-SNAPSHOT</version>
+</dependency>
+```
+4) Instantiate the rate limiter with one of the algorithms you intend to use:
+   
+   4.1) Token Bucket example:
+   ```
+    RateLimiter<TokenBucketRateLimiterConfig> rateLimiter = new CaffeineTokenBucketRateLimiter(
+        new TokenBucketRateLimiterConfig(2L, 2_000L));
+   ```
+   4.2) Leaky Bucket example:
+   ```
+    RateLimiter<LeakyBucketRateLimiterConfig> rateLimiter = new CaffeineLeakyBucketRateLimiter(
+       new LeakyBucketRateLimiterConfig(1L, 1L, 10L, 1000L));
+    ```
+   4.3) Fixed Window Counter example:
+   ```
+    RateLimiter<FixedWindowCounterRateLimiterConfig> rateLimiter = new CaffeineFixedWindowCounterRateLimiter(
+       new FixedWindowCounterRateLimiterConfig(500L, 1L));
+   ```
+5) Invoke the rate limiter's "evalutateRequest" method where you want to apply the rate limiter (the name of the method is indifferent from the algorithm used/instantiated):
+    ```
+     rateLimiter.evaluateRequest(key);
+   ```
+
+## Pure Java Redis
+1) The project is not currently on Maven Central, so you will need to download this repository and run the clean install locally (Maven version tested 3.8.1):
+```
+mvn clean install
+```
+3) Place the Maven dependency inside your project:
+```
+<dependency>
+    <groupId>com.github.scarrozzo</groupId>
+    <artifactId>ratelimit4j-redis</artifactId>
+    <version>0.1-SNAPSHOT</version>
+</dependency>
+```
+4) The Redis implementation of the algorithms is based on the "Redisson" client, so compared to the Caffeine variant it will be necessary to pass an already instantiated Redisson client and TransactionOptions. Instantiate the rate limiter with one of the algorithms you intend to use:
+   
+   4.1) Token Bucket example:
+   ```
+   RedissonClient redissonClient = Redisson.create(Config.fromYAML("""
+                        singleServerConfig:
+                            address: "redis://127.0.0.1:6379"
+                        """));
+    RateLimiter<TokenBucketRateLimiterConfig> rateLimiter = new RedisTokenBucketRateLimiter(
+       new TokenBucketRateLimiterConfig(1L, 2000L), redissonClient, TransactionOptions.defaults());
+   ```
+   4.2) Leaky Bucket example:
+   ```
+    RedissonClient redissonClient = Redisson.create(Config.fromYAML("""
+                        singleServerConfig:
+                            address: "redis://127.0.0.1:6379"
+                        """));
+    RateLimiter<LeakyBucketRateLimiterConfig> rateLimiter = new RedisLeakyBucketRateLimiter(
+       new LeakyBucketRateLimiterConfig(1L, 1L, 10L, 1000L), redissonClient, TransactionOptions.defaults());
+    ```
+   4.3) Fixed Window Counter example:
+   ```
+    RedissonClient redissonClient = Redisson.create(Config.fromYAML("""
+                        singleServerConfig:
+                            address: "redis://127.0.0.1:6379"
+                        """));
+    RateLimiter<FixedWindowCounterRateLimiterConfig> rateLimiter = new RedisFixedWindowCounterRateLimiter(
+       new FixedWindowCounterRateLimiterConfig(500L, 1L), redissonClient, TransactionOptions.defaults());
+   ```
+5) Invoke the rate limiter's "evalutateRequest" method where you want to apply the rate limiter (the name of the method is indifferent from the algorithm used/instantiated):
+    ```
+     rateLimiter.evaluateRequest(key);
+   ```
+
+## Spring boot Caffeine
+TODO
+
+## Spring boot Redis
+TODO
