@@ -1,4 +1,6 @@
 # Intro
+Rate limiting is a popular distributed system pattern. It is an integral part of all modern large-scale applications. It controls the rate at which users or services can access a resource, like an API, a service, or a network. It plays a critical role in protecting system resources and ensuring fair use among all users. Read more about this pattern here:  https://blog.bytebytego.com/p/rate-limiting-fundamentals
+
 ratelimit4j is a Java library that implements different rate limiting algorithms.
 The algorithms currently implemented are:
 - Token Bucket
