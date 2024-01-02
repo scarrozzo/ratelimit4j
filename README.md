@@ -23,7 +23,7 @@ The library is structured as a multimodule Maven project and is composed as foll
 ```
 mvn clean install
 ```
-3) Place the Maven dependency inside your project:
+2) Place the Maven dependency inside your project:
 ```
 <dependency>
     <groupId>com.github.scarrozzo</groupId>
@@ -31,25 +31,25 @@ mvn clean install
     <version>0.1-SNAPSHOT</version>
 </dependency>
 ```
-4) Instantiate the rate limiter with one of the algorithms you intend to use:
+3) Instantiate the rate limiter with one of the algorithms you intend to use:
    
-   4.1) Token Bucket example:
-   ```
+   3.1) Token Bucket example:
+   ```Java
     RateLimiter<TokenBucketRateLimiterConfig> rateLimiter = new CaffeineTokenBucketRateLimiter(
         new TokenBucketRateLimiterConfig(2L, 2_000L));
    ```
-   4.2) Leaky Bucket example:
-   ```
+   3.2) Leaky Bucket example:
+   ```Java
     RateLimiter<LeakyBucketRateLimiterConfig> rateLimiter = new CaffeineLeakyBucketRateLimiter(
        new LeakyBucketRateLimiterConfig(1L, 1L, 10L, 1000L));
     ```
-   4.3) Fixed Window Counter example:
-   ```
+   3.3) Fixed Window Counter example:
+   ```Java
     RateLimiter<FixedWindowCounterRateLimiterConfig> rateLimiter = new CaffeineFixedWindowCounterRateLimiter(
        new FixedWindowCounterRateLimiterConfig(500L, 1L));
    ```
-5) Invoke the rate limiter's "evalutateRequest" method where you want to apply the rate limiter (the name of the method is indifferent from the algorithm used/instantiated):
-    ```
+4) Invoke the rate limiter's "evalutateRequest" method where you want to apply the rate limiter (the name of the method is indifferent from the algorithm used/instantiated):
+   ```Java
      rateLimiter.evaluateRequest(key);
    ```
 
@@ -58,7 +58,7 @@ mvn clean install
 ```
 mvn clean install
 ```
-3) Place the Maven dependency inside your project:
+2) Place the Maven dependency inside your project:
 ```
 <dependency>
     <groupId>com.github.scarrozzo</groupId>
@@ -66,10 +66,10 @@ mvn clean install
     <version>0.1-SNAPSHOT</version>
 </dependency>
 ```
-4) The Redis implementation of the algorithms is based on the "Redisson" client, so compared to the Caffeine variant it will be necessary to pass an already instantiated Redisson client and TransactionOptions. Instantiate the rate limiter with one of the algorithms you intend to use:
+3) The Redis implementation of the algorithms is based on the "Redisson" client, so compared to the Caffeine variant it will be necessary to pass an already instantiated Redisson client and TransactionOptions. Instantiate the rate limiter with one of the algorithms you intend to use:
    
-   4.1) Token Bucket example:
-   ```
+   3.1) Token Bucket example:
+   ```Java
    RedissonClient redissonClient = Redisson.create(Config.fromYAML("""
                         singleServerConfig:
                             address: "redis://127.0.0.1:6379"
@@ -77,8 +77,8 @@ mvn clean install
     RateLimiter<TokenBucketRateLimiterConfig> rateLimiter = new RedisTokenBucketRateLimiter(
        new TokenBucketRateLimiterConfig(1L, 2000L), redissonClient, TransactionOptions.defaults());
    ```
-   4.2) Leaky Bucket example:
-   ```
+   3.2) Leaky Bucket example:
+   ```Java
     RedissonClient redissonClient = Redisson.create(Config.fromYAML("""
                         singleServerConfig:
                             address: "redis://127.0.0.1:6379"
@@ -86,8 +86,8 @@ mvn clean install
     RateLimiter<LeakyBucketRateLimiterConfig> rateLimiter = new RedisLeakyBucketRateLimiter(
        new LeakyBucketRateLimiterConfig(1L, 1L, 10L, 1000L), redissonClient, TransactionOptions.defaults());
     ```
-   4.3) Fixed Window Counter example:
-   ```
+   3.3) Fixed Window Counter example:
+   ```Java
     RedissonClient redissonClient = Redisson.create(Config.fromYAML("""
                         singleServerConfig:
                             address: "redis://127.0.0.1:6379"
@@ -95,8 +95,8 @@ mvn clean install
     RateLimiter<FixedWindowCounterRateLimiterConfig> rateLimiter = new RedisFixedWindowCounterRateLimiter(
        new FixedWindowCounterRateLimiterConfig(500L, 1L), redissonClient, TransactionOptions.defaults());
    ```
-5) Invoke the rate limiter's "evalutateRequest" method where you want to apply the rate limiter (the name of the method is indifferent from the algorithm used/instantiated):
-    ```
+4) Invoke the rate limiter's "evalutateRequest" method where you want to apply the rate limiter (the name of the method is indifferent from the algorithm used/instantiated):
+    ```Java
      rateLimiter.evaluateRequest(key);
    ```
 
@@ -104,4 +104,50 @@ mvn clean install
 TODO
 
 ## Spring boot Redis
+1) The project is not currently on Maven Central, so you will need to download this repository and run the clean install locally (Maven version tested 3.8.1):
+```
+mvn clean install
+```
+2) Place the Maven dependency inside your spring boot project:
+```
+<dependency>
+    <groupId>com.github.scarrozzo</groupId>
+    <artifactId>ratelimit4j-redis-spring-boot-starter</artifactId>
+    <version>0.1-SNAPSHOT</version>
+</dependency>
+```
+3) You can use the rate limiter programmatically by injecting it with autowired:
+```Java
+@Autowired
+RedisTokenBucketRateLimiter rateLimiter1;
+
+@Autowired
+RedisLeakyBucketRateLimiter rateLimiter2;
+
+@Autowired
+RedisFixedWindowCounterRateLimiter rateLimiter3;
+```
+and then invoke the rate limiter's "evalutateRequest" method where you want to apply the rate limiter (the name of the method is indifferent from the algorithm used/instantiated):
+```Java
+ rateLimiter1.evaluateRequest(key);
+```
+4) You can also configure an automatic rate limiter on incoming http requests through spring properties. For example, you can configure a rate limiter on all incoming http requests that contain the path "/api/v1/admin.*" using the "fixed window counter" algorithm and using the user's IP address as a criterion by entering the following configuration in spring's "application.yml" file: 
+```YAML
+ratelimit4j:
+  spring:
+    web:
+      limiterTypes:
+        - FIXED_WINDOW_COUNTER
+      clientType: IP_ADDRESS
+      analyzedPaths:
+        - /api/v1/admin.*
+  redis:
+    fixedwindowcounter:
+      numberOfRequests: 2
+      windowSize: 5000
+```
+See the next section for a list of all configurable spring parameters.
+
+# Spring properties 
 TODO
+
