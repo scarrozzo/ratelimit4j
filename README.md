@@ -101,7 +101,49 @@ mvn clean install
    ```
 
 ## Spring boot Caffeine
-TODO
+1) The project is not currently on Maven Central, so you will need to download this repository and run the clean install locally (Maven version tested 3.8.1):
+```
+mvn clean install
+```
+2) Place the Maven dependency inside your spring boot project:
+```
+<dependency>
+    <groupId>com.github.scarrozzo</groupId>
+    <artifactId>ratelimit4j-caffeine-spring-boot-starter</artifactId>
+    <version>0.1-SNAPSHOT</version>
+</dependency>
+```
+3) You can use the rate limiter programmatically by injecting it with autowired:
+```Java
+@Autowired
+CaffeineTokenBucketRateLimiter rateLimiter1;
+
+@Autowired
+CaffeineLeakyBucketRateLimiter rateLimiter2;
+
+@Autowired
+CaffeineFixedWindowCounterRateLimiter rateLimiter3;
+```
+and then invoke the rate limiter's "evalutateRequest" method where you want to apply the rate limiter (the name of the method is indifferent from the algorithm used/instantiated):
+```Java
+ rateLimiter1.evaluateRequest(key);
+```
+4) You can also configure an automatic rate limiter on incoming http requests through spring properties. For example, you can configure a rate limiter on all incoming http requests that contain the path "/api/v1/admin.*" (regex are supported) using the "Token Bucket" algorithm and using the user's IP address as a criterion by entering the following configuration in spring's "application.yml" file: 
+```YAML
+ratelimit4j:
+  spring:
+    web:
+      limiterTypes:
+        - TOKEN_BUCKET
+      clientType: IP_ADDRESS
+      analyzedPaths:
+        - /api/v1/admin.*
+  caffeine:
+    tokenbucket:
+      bucketSize: 3
+      refillPeriodInMilliSeconds: 5_000
+```
+See the next sections for a list of all configurable spring parameters.
 
 ## Spring boot Redis
 1) The project is not currently on Maven Central, so you will need to download this repository and run the clean install locally (Maven version tested 3.8.1):
@@ -116,7 +158,25 @@ mvn clean install
     <version>0.1-SNAPSHOT</version>
 </dependency>
 ```
-3) You can use the rate limiter programmatically by injecting it with autowired:
+3) For the Redis version, it is necessary to provide to the library one instance of the class "RedissonClient" and one of "TransactionOptions". It is possible to do this by configuring two beans in this way (to be adapted depending on the type of Redis configuration used in your application):
+```Java
+@Configuration
+public class RedisConfig {
+    @Bean
+    public RedissonClient redissonClient() throws IOException {
+        return Redisson.create(Config.fromYAML("""
+                        singleServerConfig:
+                            address: "redis://127.0.0.1:6379"
+                        """));
+    }
+
+    @Bean
+    public TransactionOptions transactionOptions(){
+        return TransactionOptions.defaults();
+    }
+}
+```
+4) You can use the rate limiter programmatically by injecting it with autowired:
 ```Java
 @Autowired
 RedisTokenBucketRateLimiter rateLimiter1;
@@ -131,7 +191,7 @@ and then invoke the rate limiter's "evalutateRequest" method where you want to a
 ```Java
  rateLimiter1.evaluateRequest(key);
 ```
-4) You can also configure an automatic rate limiter on incoming http requests through spring properties. For example, you can configure a rate limiter on all incoming http requests that contain the path "/api/v1/admin.*" using the "fixed window counter" algorithm and using the user's IP address as a criterion by entering the following configuration in spring's "application.yml" file: 
+5) You can also configure an automatic rate limiter on incoming http requests through spring properties. For example, you can configure a rate limiter on all incoming http requests that contain the path "/api/v1/admin.*" (regex are supported) using the "fixed window counter" algorithm and using the user's IP address as a criterion by entering the following configuration in spring's "application.yml" file: 
 ```YAML
 ratelimit4j:
   spring:
@@ -146,7 +206,7 @@ ratelimit4j:
       numberOfRequests: 2
       windowSize: 5000
 ```
-See the next section for a list of all configurable spring parameters.
+See the next sections for a list of all configurable spring parameters.
 
 # Spring properties 
 TODO
