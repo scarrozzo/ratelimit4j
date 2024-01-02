@@ -214,7 +214,7 @@ ratelimit4j:
 When the number of requests exceeds the configured threshold determined by the chosen algorithm, the method invocation will throw an exception of the "RateLimiterException" type.
 See the next sections for a list of all configurable spring parameters.
 
-# Algorithm configuration parameters.
+# Algorithm configuration parameters
 
 ## Token Bucket
 TODO
