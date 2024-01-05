@@ -1,4 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.github.scarrozzo.ratelimit4j.spring.redis.autoconfigure.RedisTokenBucketRateLimiterAutoconfiguration,\
-  com.github.scarrozzo.ratelimit4j.spring.redis.autoconfigure.RedisLeakyBucketRateLimiterAutoconfiguration,\
-  com.github.scarrozzo.ratelimit4j.spring.redis.autoconfigure.RedisFixedWindowCounterRateLimiterAutoconfiguration
+  io.github.scarrozzo.ratelimit4j.spring.redis.autoconfigure.RedisTokenBucketRateLimiterAutoconfiguration,\
+  io.github.scarrozzo.ratelimit4j.spring.redis.autoconfigure.RedisLeakyBucketRateLimiterAutoconfiguration,\
+  io.github.scarrozzo.ratelimit4j.spring.redis.autoconfigure.RedisFixedWindowCounterRateLimiterAutoconfiguration

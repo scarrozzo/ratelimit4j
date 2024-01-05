@@ -1,4 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.github.scarrozzo.ratelimit4j.spring.caffeine.autoconfigure.CaffeineTokenBucketRateLimiterAutoconfiguration,\
-  com.github.scarrozzo.ratelimit4j.spring.caffeine.autoconfigure.CaffeineLeakyBucketRateLimiterAutoconfiguration,\
-  com.github.scarrozzo.ratelimit4j.spring.caffeine.autoconfigure.CaffeineFixedWindowCounterRateLimiterAutoconfiguration
+  io.github.scarrozzo.ratelimit4j.spring.caffeine.autoconfigure.CaffeineTokenBucketRateLimiterAutoconfiguration,\
+  io.github.scarrozzo.ratelimit4j.spring.caffeine.autoconfigure.CaffeineLeakyBucketRateLimiterAutoconfiguration,\
+  io.github.scarrozzo.ratelimit4j.spring.caffeine.autoconfigure.CaffeineFixedWindowCounterRateLimiterAutoconfiguration

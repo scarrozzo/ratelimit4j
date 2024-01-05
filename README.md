@@ -26,7 +26,7 @@ mvn clean install
 2) Place the Maven dependency inside your project:
 ```
 <dependency>
-    <groupId>com.github.scarrozzo</groupId>
+    <groupId>io.github.scarrozzo</groupId>
     <artifactId>ratelimit4j-caffeine</artifactId>
     <version>0.1-SNAPSHOT</version>
 </dependency>
@@ -63,7 +63,7 @@ mvn clean install
 2) Place the Maven dependency inside your project:
 ```
 <dependency>
-    <groupId>com.github.scarrozzo</groupId>
+    <groupId>io.github.scarrozzo</groupId>
     <artifactId>ratelimit4j-redis</artifactId>
     <version>0.1-SNAPSHOT</version>
 </dependency>
@@ -112,7 +112,7 @@ mvn clean install
 2) Place the Maven dependency inside your spring boot project:
 ```
 <dependency>
-    <groupId>com.github.scarrozzo</groupId>
+    <groupId>io.github.scarrozzo</groupId>
     <artifactId>ratelimit4j-caffeine-spring-boot-starter</artifactId>
     <version>0.1-SNAPSHOT</version>
 </dependency>
@@ -160,7 +160,7 @@ mvn clean install
 2) Place the Maven dependency inside your spring boot project:
 ```
 <dependency>
-    <groupId>com.github.scarrozzo</groupId>
+    <groupId>io.github.scarrozzo</groupId>
     <artifactId>ratelimit4j-redis-spring-boot-starter</artifactId>
     <version>0.1-SNAPSHOT</version>
 </dependency>
