@@ -214,7 +214,7 @@ ratelimit4j:
       windowSize: 5000
 ```
 When the number of requests exceeds the configured threshold determined by the chosen algorithm, the method invocation will throw an exception of the "RateLimiterException" type.
-See the next sections for a list of all configurable spring parameters.
+See [Spring properties ](#spring-properties) for a list of all configurable spring parameters.
 
 # Algorithm configuration parameters
 
@@ -240,5 +240,40 @@ FixedWindowCounterRateLimiterConfig accepts two parameters as arguments: windowS
 | long type. Specifies the time interval, expressed in milliseconds, within which a maximum number of requests equal to numberOfRequests are allowed.  | long type. Specifies the maximum number of requests allowed within the time window.  |
 
 # Spring properties 
-TODO
+
+```
+ratelimit4j:
+  spring:                                                # This autoconfiguration is not enabled by default. If specified in the application properties file, it allows a rate limiter to be configured on all incoming HTTP requests
+    web:
+      limiterTypes:
+        - TOKEN_BUCKET                                   # The list of rate limiters to be configured automatically. Can be: TOKEN_BUCKET, LEAKY_BUCKET, FIXED_WINDOW_COUNTER
+      clientType: IP_ADDRESS                             # Can be: IP_ADDRESS, JWT. If JWT is specified, the token in the Authorization header will be used as the rate limiter key.
+      analyzedPaths:
+        - /api/v1/ad.*                                   # The list of paths to be submitted to the self-configured rate limiter. Supports regex expressions.
+  redis:                                                 # Configurations of the three algorithms for redis in case it is inserted as a Maven dependency ratelimit4j-redis-spring-boot-starter
+    fixedwindowcounter:
+      numberOfRequests: 2
+      windowSize: 5000
+    leakybucket:
+      bucketSize: 2
+      outflowRateNumReq: 1
+      outflowRatePeriodInMilliseconds: 10000
+      clearQueueAfterInactivityInMilliseconds: 20000
+    tokenbucket:
+      bucketSize: 2
+      refillPeriodInMilliSeconds: 5_000
+  caffeine:                                              # Configurations of the three algorithms for caffeine in case it is inserted as a Maven dependency ratelimit4j-caffeine-spring-boot-starter
+    fixedwindowcounter:
+      numberOfRequests: 2
+      windowSize: 2000
+    leakybucket:
+      bucketSize: 2
+      outflowRateNumReq: 1
+      outflowRatePeriodInMilliseconds: 5000
+      clearQueueAfterInactivityInMilliseconds: 10000
+    tokenbucket:
+      bucketSize: 3
+      refillPeriodInMilliSeconds: 5_000
+```
+
 
