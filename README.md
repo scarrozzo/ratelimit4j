@@ -97,7 +97,7 @@ mvn clean install
     RateLimiter<FixedWindowCounterRateLimiterConfig> rateLimiter = new RedisFixedWindowCounterRateLimiter(
        new FixedWindowCounterRateLimiterConfig(500L, 1L), redissonClient, TransactionOptions.defaults());
    ```
-   Each constructor receives algorithm configuration parameters as input. For the list of parameters of each algorithm and their meaning go to [Algorithm configuration parameters](#algorithm-configuration-parameters)
+   Each constructor receives algorithm configuration parameters as input. For the list of parameters of each algorithm and their meaning go to [Algorithm configuration parameters](#algorithm-configuration-parameters).
 4) Invoke the rate limiter's "evalutateRequest" method where you want to apply the rate limiter (the name of the method is indifferent from the algorithm used/instantiated):
     ```Java
      rateLimiter.evaluateRequest(key);
@@ -133,6 +133,7 @@ and then invoke the rate limiter's "evalutateRequest" method where you want to a
  rateLimiter1.evaluateRequest(key);
 ```
 When the number of requests exceeds the configured threshold determined by the chosen algorithm, the method invocation will throw an exception of the "RateLimiterException" type.
+
 4) You can also configure an automatic rate limiter on incoming http requests through spring properties. For example, you can configure a rate limiter on all incoming http requests that contain the path "/api/v1/admin.*" (regex are supported) using the "Token Bucket" algorithm and using the user's IP address as a criterion by entering the following configuration in spring's "application.yml" file: 
 ```YAML
 ratelimit4j:
@@ -198,6 +199,7 @@ and then invoke the rate limiter's "evalutateRequest" method where you want to a
  rateLimiter1.evaluateRequest(key);
 ```
 The key identifies the client undergoing rate limting. It could be, for example, the IP address of the user or third-party system that is calling us. When the number of requests exceeds the configured threshold determined by the chosen algorithm, the method invocation will throw an exception of the "RateLimiterException" type.
+
 5) You can also configure an automatic rate limiter on incoming http requests through spring properties. For example, you can configure a rate limiter on all incoming http requests that contain the path "/api/v1/admin.*" (regex are supported) using the "fixed window counter" algorithm and using the user's IP address as a criterion by entering the following configuration in spring's "application.yml" file: 
 ```YAML
 ratelimit4j:
