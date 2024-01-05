@@ -65,7 +65,7 @@ class RedisLeakyBucketRateLimiterTest {
     void evaluateRequestWithRateLimitError() {
         String key = "127.0.0.2";
         final RateLimiter<LeakyBucketRateLimiterConfig> rateLimiter = new RedisLeakyBucketRateLimiter(
-                new LeakyBucketRateLimiterConfig(2L, 1L, 10L, 1000L),
+                new LeakyBucketRateLimiterConfig(2L, 1L, 100L, 1000L),
                 redissonClient, TransactionOptions.defaults());
 
         Assertions.assertDoesNotThrow(() -> rateLimiter.evaluateRequest(key));
