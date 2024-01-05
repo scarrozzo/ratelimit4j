@@ -28,7 +28,7 @@ mvn clean install
 <dependency>
     <groupId>io.github.scarrozzo</groupId>
     <artifactId>ratelimit4j-caffeine</artifactId>
-    <version>0.2</version>
+    <version>0.3</version>
 </dependency>
 ```
 3) Instantiate the rate limiter with one of the algorithms you intend to use:
@@ -65,7 +65,7 @@ mvn clean install
 <dependency>
     <groupId>io.github.scarrozzo</groupId>
     <artifactId>ratelimit4j-redis</artifactId>
-    <version>0.2</version>
+    <version>0.3</version>
 </dependency>
 ```
 3) The Redis implementation of the algorithms is based on the "Redisson" client, so compared to the Caffeine variant it will be necessary to pass an already instantiated Redisson client and TransactionOptions. Instantiate the rate limiter with one of the algorithms you intend to use:
@@ -114,7 +114,7 @@ mvn clean install
 <dependency>
     <groupId>io.github.scarrozzo</groupId>
     <artifactId>ratelimit4j-caffeine-spring-boot-starter</artifactId>
-    <version>0.2</version>
+    <version>0.3</version>
 </dependency>
 ```
 3) You can use the rate limiter programmatically by injecting it with autowired:
@@ -162,7 +162,7 @@ mvn clean install
 <dependency>
     <groupId>io.github.scarrozzo</groupId>
     <artifactId>ratelimit4j-redis-spring-boot-starter</artifactId>
-    <version>0.2</version>
+    <version>0.3</version>
 </dependency>
 ```
 3) For the Redis version, it is necessary to provide to the library one instance of the class "RedissonClient" and one of "TransactionOptions". It is possible to do this by configuring two beans in this way (to be adapted depending on the type of Redis configuration used in your application):
