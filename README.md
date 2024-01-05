@@ -48,7 +48,7 @@ mvn clean install
     RateLimiter<FixedWindowCounterRateLimiterConfig> rateLimiter = new CaffeineFixedWindowCounterRateLimiter(
        new FixedWindowCounterRateLimiterConfig(500L, 1L));
    ```
-   [Algorithm configuration parameters](#algorithm-configuration-parameters)
+   Each constructor receives algorithm configuration parameters as input. For the list of parameters of each algorithm and their meaning go to [Algorithm configuration parameters](#algorithm-configuration-parameters)
 4) Invoke the rate limiter's "evalutateRequest" method where you want to apply the rate limiter (the name of the method is indifferent from the algorithm used/instantiated):
    ```Java
      rateLimiter.evaluateRequest(key);
@@ -97,6 +97,7 @@ mvn clean install
     RateLimiter<FixedWindowCounterRateLimiterConfig> rateLimiter = new RedisFixedWindowCounterRateLimiter(
        new FixedWindowCounterRateLimiterConfig(500L, 1L), redissonClient, TransactionOptions.defaults());
    ```
+   Each constructor receives algorithm configuration parameters as input. For the list of parameters of each algorithm and their meaning go to [Algorithm configuration parameters](#algorithm-configuration-parameters)
 4) Invoke the rate limiter's "evalutateRequest" method where you want to apply the rate limiter (the name of the method is indifferent from the algorithm used/instantiated):
     ```Java
      rateLimiter.evaluateRequest(key);
