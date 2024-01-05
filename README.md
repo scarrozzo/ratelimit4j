@@ -19,11 +19,7 @@ The library is structured as a multimodule Maven project and is composed as foll
 # Usage
 
 ## Pure Java Caffeine
-1) The project is not currently on Maven Central, so you will need to download this repository and run the clean install locally (Maven version tested 3.8.1):
-```
-mvn clean install
-```
-2) Place the Maven dependency inside your project:
+1) The project is published on Maven Central Repository, so you should only to include the dependency in your project:
 ```
 <dependency>
     <groupId>io.github.scarrozzo</groupId>
@@ -31,36 +27,32 @@ mvn clean install
     <version>0.3</version>
 </dependency>
 ```
-3) Instantiate the rate limiter with one of the algorithms you intend to use:
+2) Instantiate the rate limiter with one of the algorithms you intend to use:
    
-   3.1) Token Bucket example:
+   2.1) Token Bucket example:
    ```Java
     RateLimiter<TokenBucketRateLimiterConfig> rateLimiter = new CaffeineTokenBucketRateLimiter(
         new TokenBucketRateLimiterConfig(2L, 2_000L));
    ```
-   3.2) Leaky Bucket example:
+   2.2) Leaky Bucket example:
    ```Java
     RateLimiter<LeakyBucketRateLimiterConfig> rateLimiter = new CaffeineLeakyBucketRateLimiter(
        new LeakyBucketRateLimiterConfig(1L, 1L, 10L, 1000L));
     ```
-   3.3) Fixed Window Counter example:
+   2.3) Fixed Window Counter example:
    ```Java
     RateLimiter<FixedWindowCounterRateLimiterConfig> rateLimiter = new CaffeineFixedWindowCounterRateLimiter(
        new FixedWindowCounterRateLimiterConfig(500L, 1L));
    ```
    Each constructor receives algorithm configuration parameters as input. For the list of parameters of each algorithm and their meaning go to [Algorithm configuration parameters](#algorithm-configuration-parameters)
-4) Invoke the rate limiter's "evalutateRequest" method where you want to apply the rate limiter (the name of the method is indifferent from the algorithm used/instantiated):
+3) Invoke the rate limiter's "evalutateRequest" method where you want to apply the rate limiter (the name of the method is indifferent from the algorithm used/instantiated):
    ```Java
      rateLimiter.evaluateRequest(key);
    ```
    The key identifies the client undergoing rate limting. It could be, for example, the IP address of the user or third-party system that is calling us. When the number of requests exceeds the configured threshold determined by the chosen algorithm, the method invocation will throw an exception of the "RateLimiterException" type.
 
 ## Pure Java Redis
-1) The project is not currently on Maven Central, so you will need to download this repository and run the clean install locally (Maven version tested 3.8.1):
-```
-mvn clean install
-```
-2) Place the Maven dependency inside your project:
+1) The project is published on Maven Central Repository, so you should only to include the dependency in your project:
 ```
 <dependency>
     <groupId>io.github.scarrozzo</groupId>
@@ -68,9 +60,9 @@ mvn clean install
     <version>0.3</version>
 </dependency>
 ```
-3) The Redis implementation of the algorithms is based on the "Redisson" client, so compared to the Caffeine variant it will be necessary to pass an already instantiated Redisson client and TransactionOptions. Instantiate the rate limiter with one of the algorithms you intend to use:
+2) The Redis implementation of the algorithms is based on the "Redisson" client, so compared to the Caffeine variant it will be necessary to pass an already instantiated Redisson client and TransactionOptions. Instantiate the rate limiter with one of the algorithms you intend to use:
    
-   3.1) Token Bucket example:
+   2.1) Token Bucket example:
    ```Java
    RedissonClient redissonClient = Redisson.create(Config.fromYAML("""
                         singleServerConfig:
@@ -79,7 +71,7 @@ mvn clean install
     RateLimiter<TokenBucketRateLimiterConfig> rateLimiter = new RedisTokenBucketRateLimiter(
        new TokenBucketRateLimiterConfig(1L, 2000L), redissonClient, TransactionOptions.defaults());
    ```
-   3.2) Leaky Bucket example:
+   2.2) Leaky Bucket example:
    ```Java
     RedissonClient redissonClient = Redisson.create(Config.fromYAML("""
                         singleServerConfig:
@@ -88,7 +80,7 @@ mvn clean install
     RateLimiter<LeakyBucketRateLimiterConfig> rateLimiter = new RedisLeakyBucketRateLimiter(
        new LeakyBucketRateLimiterConfig(1L, 1L, 10L, 1000L), redissonClient, TransactionOptions.defaults());
     ```
-   3.3) Fixed Window Counter example:
+   2.3) Fixed Window Counter example:
    ```Java
     RedissonClient redissonClient = Redisson.create(Config.fromYAML("""
                         singleServerConfig:
@@ -98,18 +90,14 @@ mvn clean install
        new FixedWindowCounterRateLimiterConfig(500L, 1L), redissonClient, TransactionOptions.defaults());
    ```
    Each constructor receives algorithm configuration parameters as input. For the list of parameters of each algorithm and their meaning go to [Algorithm configuration parameters](#algorithm-configuration-parameters).
-4) Invoke the rate limiter's "evalutateRequest" method where you want to apply the rate limiter (the name of the method is indifferent from the algorithm used/instantiated):
+3) Invoke the rate limiter's "evalutateRequest" method where you want to apply the rate limiter (the name of the method is indifferent from the algorithm used/instantiated):
     ```Java
      rateLimiter.evaluateRequest(key);
    ```
    The key identifies the client undergoing rate limting. It could be, for example, the IP address of the user or third-party system that is calling us. When the number of requests exceeds the configured threshold determined by the chosen algorithm, the method invocation will throw an exception of the "RateLimiterException" type.
 
 ## Spring boot Caffeine
-1) The project is not currently on Maven Central, so you will need to download this repository and run the clean install locally (Maven version tested 3.8.1):
-```
-mvn clean install
-```
-2) Place the Maven dependency inside your spring boot project:
+1) The project is published on Maven Central Repository, so you should only to include the dependency in your project:
 ```
 <dependency>
     <groupId>io.github.scarrozzo</groupId>
@@ -117,7 +105,7 @@ mvn clean install
     <version>0.3</version>
 </dependency>
 ```
-3) You can use the rate limiter programmatically by injecting it with autowired:
+2) You can use the rate limiter programmatically by injecting it with autowired:
 ```Java
 @Autowired
 CaffeineTokenBucketRateLimiter rateLimiter1;
@@ -134,7 +122,7 @@ and then invoke the rate limiter's "evalutateRequest" method where you want to a
 ```
 When the number of requests exceeds the configured threshold determined by the chosen algorithm, the method invocation will throw an exception of the "RateLimiterException" type.
 
-4) You can also configure an automatic rate limiter on incoming http requests through spring properties. For example, you can configure a rate limiter on all incoming http requests that contain the path "/api/v1/admin.*" (regex are supported) using the "Token Bucket" algorithm and using the user's IP address as a criterion by entering the following configuration in spring's "application.yml" file: 
+3) You can also configure an automatic rate limiter on incoming http requests through spring properties. For example, you can configure a rate limiter on all incoming http requests that contain the path "/api/v1/admin.*" (regex are supported) using the "Token Bucket" algorithm and using the user's IP address as a criterion by entering the following configuration in spring's "application.yml" file: 
 ```YAML
 ratelimit4j:
   spring:
@@ -153,11 +141,7 @@ When the number of requests exceeds the configured threshold determined by the c
 See the next sections for a list of all configurable spring parameters.
 
 ## Spring boot Redis
-1) The project is not currently on Maven Central, so you will need to download this repository and run the clean install locally (Maven version tested 3.8.1):
-```
-mvn clean install
-```
-2) Place the Maven dependency inside your spring boot project:
+1) The project is published on Maven Central Repository, so you should only to include the dependency in your project:
 ```
 <dependency>
     <groupId>io.github.scarrozzo</groupId>
@@ -165,7 +149,7 @@ mvn clean install
     <version>0.3</version>
 </dependency>
 ```
-3) For the Redis version, it is necessary to provide to the library one instance of the class "RedissonClient" and one of "TransactionOptions". It is possible to do this by configuring two beans in this way (to be adapted depending on the type of Redis configuration used in your application):
+2) For the Redis version, it is necessary to provide to the library one instance of the class "RedissonClient" and one of "TransactionOptions". It is possible to do this by configuring two beans in this way (to be adapted depending on the type of Redis configuration used in your application):
 ```Java
 @Configuration
 public class RedisConfig {
@@ -183,7 +167,7 @@ public class RedisConfig {
     }
 }
 ```
-4) You can use the rate limiter programmatically by injecting it with autowired:
+3) You can use the rate limiter programmatically by injecting it with autowired:
 ```Java
 @Autowired
 RedisTokenBucketRateLimiter rateLimiter1;
@@ -200,7 +184,7 @@ and then invoke the rate limiter's "evalutateRequest" method where you want to a
 ```
 The key identifies the client undergoing rate limting. It could be, for example, the IP address of the user or third-party system that is calling us. When the number of requests exceeds the configured threshold determined by the chosen algorithm, the method invocation will throw an exception of the "RateLimiterException" type.
 
-5) You can also configure an automatic rate limiter on incoming http requests through spring properties. For example, you can configure a rate limiter on all incoming http requests that contain the path "/api/v1/admin.*" (regex are supported) using the "fixed window counter" algorithm and using the user's IP address as a criterion by entering the following configuration in spring's "application.yml" file: 
+4) You can also configure an automatic rate limiter on incoming http requests through spring properties. For example, you can configure a rate limiter on all incoming http requests that contain the path "/api/v1/admin.*" (regex are supported) using the "fixed window counter" algorithm and using the user's IP address as a criterion by entering the following configuration in spring's "application.yml" file: 
 ```YAML
 ratelimit4j:
   spring:
