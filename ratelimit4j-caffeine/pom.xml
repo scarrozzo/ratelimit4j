@@ -4,11 +4,11 @@
   <parent>
     <artifactId>ratelimit4j-parent</artifactId>
     <groupId>io.github.scarrozzo</groupId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.2</version>
   </parent>
 
   <artifactId>ratelimit4j-caffeine</artifactId>
-  <version>0.1-SNAPSHOT</version>
+  <version>0.2</version>
 
   <name>ratelimit4j-caffeine</name>
   <url>https://github.com/scarrozzo</url>
@@ -32,7 +32,7 @@
     <dependency>
       <groupId>io.github.scarrozzo</groupId>
       <artifactId>ratelimit4j-core</artifactId>
-      <version>0.1-SNAPSHOT</version>
+      <version>0.2</version>
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
